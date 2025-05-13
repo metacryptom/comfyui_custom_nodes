@@ -70,11 +70,6 @@ def gpt_edit_image(image_path, prompt, api_key,endpoint, output_path=None, max_r
                 time.sleep(retry_interval)
             else:
                 raise Exception(f"Failed to edit image after {max_retry} attempts: {str(e)}")
-        finally:
-            # Close any open files
-            for file in files.values():
-                if isinstance(file, tuple) and hasattr(file[1], 'close'):
-                    file[1].close()
 
 class GPTImageGenerator:
     @classmethod
@@ -89,10 +84,10 @@ class GPTImageGenerator:
                 "api_key": ("STRING", {"default": "", "multiline": False}),
                 "api_url": ("STRING", {"default": config["api_url"], "multiline": False}),
                 "images": ("IMAGE",),
-                "masks": ("MASK",),
                 "seed": ("INT", {"default": 66666666, "min": 0, "max": 4294967295}),
             },
             "optional": {
+                "masks": ("MASK",),
                 "size": (["1024x1024", "1024x1536", "1536x1024"], {"default": "1024x1536"}),
             }
         }
